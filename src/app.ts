@@ -5,6 +5,7 @@ import { authRouter } from "./modules/auth/auth.route";
 
 const app: Application = express();
 
+app.use(express.json())
 app.use(loggerMiddleware);
 
 app.get("/", (req: Req, res: Res) => {
