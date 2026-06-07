@@ -30,10 +30,36 @@ const createUser = async (payLoad: IRegisterUserPayload) => {
   );
 
   const { password: _, ...user } = result.rows[0];
-  
+
+  return user;
+};
+
+const loginUserService = async (payLoad: IRegisterUserPayload) => {
+  const { email, password } = payLoad;
+
+  const userData = await pool.query(`SELECT * FROM users WHERE email=$1`, [
+    email,
+  ]);
+
+  if (!userData.rowCount) {
+    throw new AppError("Invalid Credential", 401);
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    password,
+    userData.rows[0].password,
+  );
+
+  if (!isPasswordValid) {
+    throw new AppError("Invalid password", 401);
+  }
+
+  const { password: _, ...user } = userData.rows[0];
+
   return user;
 };
 
 export const authService = {
   createUser,
+  loginUserService,
 };

@@ -5,8 +5,18 @@ import { authService } from "./auth.service";
 const signUpUser = async (req: Req, res: Res, next: Next) => {
   try {
     const result = await authService.createUser(req.body);
-    
+
     sendResponse(res, 201, "User registered successfully", result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const loginUser = async (req: Req, res: Res, next: Next) => {
+  try {
+    const result = await authService.loginUserService(req.body);
+
+    sendResponse(res, 201, "Login successful", result);
   } catch (error) {
     next(error);
   }
@@ -14,4 +24,5 @@ const signUpUser = async (req: Req, res: Res, next: Next) => {
 
 export const authController = {
   signUpUser,
+  loginUser,
 };
