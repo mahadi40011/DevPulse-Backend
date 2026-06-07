@@ -1,11 +1,10 @@
-import express from "express";
+import app from "./app";
 import envConfig from "./config";
-const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+const main = () => {
+  app.listen(envConfig.port, () => {
+    console.log(`DevPuls server listening on port ${envConfig.port}`);
+  });
+}
 
-app.listen(envConfig.port, () => {
-  console.log(`Example app listening on port ${envConfig.port}`);
-});
+main()
