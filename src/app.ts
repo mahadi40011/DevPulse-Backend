@@ -1,6 +1,7 @@
 import express, { type Application } from "express";
 import type { Req, Res } from "./types";
 import loggerMiddleware from "./middleware/logger.middleware";
+import { authRouter } from "./modules/auth/auth.route";
 
 const app: Application = express();
 
@@ -13,5 +14,7 @@ app.get("/", (req: Req, res: Res) => {
     developer: "M. H. Mahbub",
   });
 });
+
+app.use("/api/auth", authRouter)
 
 export default app;
