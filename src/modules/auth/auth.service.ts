@@ -1,5 +1,5 @@
 import { pool } from "../../db";
-import type { IRegisterUserPayload } from "../../types";
+import type { IRegisterUserPayload } from "./auth.interface";
 import AppError from "../../utils/appError";
 import bcrypt from "bcryptjs";
 
