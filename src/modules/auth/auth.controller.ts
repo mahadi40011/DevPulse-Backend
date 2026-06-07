@@ -1,7 +1,7 @@
-import type { Req, Res } from "../../types";
+import type { Next, Req, Res } from "../../types";
 import { authService } from "./auth.service";
 
-const signUpUser = async (req: Req, res: Res) => {
+const signUpUser = async (req: Req, res: Res, next: Next) => {
   try {
     const result = await authService.createUser(req.body);
 
@@ -10,12 +10,8 @@ const signUpUser = async (req: Req, res: Res) => {
       message: "User registered successfully",
       data: result,
     });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-      data: error,
-    });
+  } catch (error) {
+    next(error);
   }
 };
 

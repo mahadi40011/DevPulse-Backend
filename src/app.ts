@@ -2,10 +2,11 @@ import express, { type Application } from "express";
 import type { Req, Res } from "./types";
 import loggerMiddleware from "./middleware/logger.middleware";
 import { authRouter } from "./modules/auth/auth.route";
+import globalErrorHandler from "./middleware/globalErrorHandler";
 
 const app: Application = express();
 
-app.use(express.json())
+app.use(express.json());
 app.use(loggerMiddleware);
 
 app.get("/", (req: Req, res: Res) => {
@@ -16,6 +17,8 @@ app.get("/", (req: Req, res: Res) => {
   });
 });
 
-app.use("/api/auth", authRouter)
+app.use("/api/auth", authRouter);
+
+app.use(globalErrorHandler);
 
 export default app;
