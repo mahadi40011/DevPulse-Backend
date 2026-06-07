@@ -1,8 +1,10 @@
 import express, { type Application } from "express";
 import type { Req, Res } from "./types";
-
+import loggerMiddleware from "./middleware/logger.middleware";
 
 const app: Application = express();
+
+app.use(loggerMiddleware);
 
 app.get("/", (req: Req, res: Res) => {
   res.status(200).json({
@@ -12,4 +14,4 @@ app.get("/", (req: Req, res: Res) => {
   });
 });
 
-export default app
+export default app;
