@@ -45,6 +45,23 @@ const getAllIssuesService = async (query: IQuery) => {
   if (status && !allowedStatusValue.includes(status)) {
     throw new AppError("Invalid status value", 400);
   }
+
+  // Building dynamic WHERE clause based on type and status
+  const conditions: string[] = [];
+  const values: string[] = [];
+
+  if (type) {
+    values.push(type);
+    conditions.push(`type = $${values.length}`);
+  }
+
+  if (status) {
+    values.push(status);
+    conditions.push(`status = $${values.length}`);
+  }
+
+  const whereClause =
+    conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
 };
 
 export const issuesService = {
