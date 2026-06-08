@@ -78,6 +78,21 @@ const getAllIssuesService = async (query: IQuery) => {
   if (issues.length === 0) {
     throw new AppError("No issues found matching your filters", 404);
   }
+
+  // Extract reporter IDs
+  const reporterIds = [...new Set(issues.map((issue) => issue.reporter_id))];
+
+  // Fetch reporters (batch) by reporter_id
+  const userResult = await pool.query(
+    `
+    SELECT id, name, role
+    FROM users
+    WHERE id = ANY($1)
+    `,
+    [reporterIds],
+  );
+
+  const users = userResult.rows;
 };
 
 export const issuesService = {
