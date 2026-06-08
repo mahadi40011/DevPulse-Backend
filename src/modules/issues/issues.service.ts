@@ -2,7 +2,6 @@ import type { JwtPayload } from "jsonwebtoken";
 import type { IIssuesPayload, IQuery } from "./issues.interface";
 import { pool } from "../../db";
 import AppError from "../../utils/appError";
-import { Result } from "pg";
 
 const createIssuesService = async (
   payload: IIssuesPayload,
@@ -136,9 +135,31 @@ const getSingleIssueService = async (id: string) => {
   return data;
 };
 
-const updateIssueService = async (id: string) => {
-  return id
-}
+const updateIssueService = async (payload: IIssuesPayload, id: string) => {
+  const { title, description, type } = payload;
+
+  const allowedTypes = ["feature_request", "bug"];
+
+  if (!allowedTypes.includes(type as string)) {
+    throw new AppError("Invalid type", 400);
+  }
+
+  const result = await pool.query(
+    `
+    UPDATE issues
+    SET
+      title = COALESCE($1, title),
+      description = COALESCE($2, description),
+      type = COALESCE($3, type),
+      updated_at = NOW()
+    WHERE id = $4
+    RETURNING *
+    `,
+    [title, description, type, id],
+  );
+
+  return result.rows[0];
+};
 
 export const issuesService = {
   createIssuesService,
