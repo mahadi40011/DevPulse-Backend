@@ -161,9 +161,14 @@ const updateIssueService = async (payload: IIssuesPayload, id: string) => {
   return result.rows[0];
 };
 
+const deleteIssueService = async (id: string) => {
+  return id;
+};
+
 export const issuesService = {
   createIssuesService,
   getAllIssuesService,
   getSingleIssueService,
   updateIssueService,
+  deleteIssueService,
 };
