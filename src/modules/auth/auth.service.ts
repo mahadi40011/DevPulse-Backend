@@ -2,6 +2,8 @@ import { pool } from "../../db";
 import type { IRegisterUserPayload } from "./auth.interface";
 import AppError from "../../utils/appError";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import envConfig from "../../config";
 
 const createUser = async (payLoad: IRegisterUserPayload) => {
   const { name, email, password, role } = payLoad;
@@ -45,18 +47,27 @@ const loginUserService = async (payLoad: IRegisterUserPayload) => {
     throw new AppError("Invalid Credential", 401);
   }
 
-  const isPasswordValid = await bcrypt.compare(
-    password,
-    userData.rows[0].password,
-  );
+  const userInfo = userData.rows[0];
+  const isPasswordValid = await bcrypt.compare(password, userInfo.password);
 
   if (!isPasswordValid) {
     throw new AppError("Invalid password", 401);
   }
 
+  // Token generate
+  const jwtPayload = {
+    id: userInfo.id,
+    name: userInfo.name,
+    role: userInfo.role,
+  };
+
+  const accessToken = jwt.sign(jwtPayload, envConfig.jwt_secret as string, {
+    expiresIn: "1d",
+  });
+
   const { password: _, ...user } = userData.rows[0];
 
-  return user;
+  return { token: accessToken, user };
 };
 
 export const authService = {
