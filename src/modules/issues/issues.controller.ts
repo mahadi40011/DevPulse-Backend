@@ -37,8 +37,22 @@ const getSingleIssue = async (req: Req, res: Res, next: Next) => {
   }
 };
 
+const updateIssue = async (req: Req, res: Res, next: Next) => {
+  try {
+    const { id } = req.params;
+    const result = await issuesService.updateIssueService(id as string);
+
+    sendResponse(res, 200, "Issue updated successfully", result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
 export const issuesController = {
   createIssues,
   getAllIssues,
   getSingleIssue,
+  updateIssue,
 };

@@ -136,8 +136,13 @@ const getSingleIssueService = async (id: string) => {
   return data;
 };
 
+const updateIssueService = async (id: string) => {
+  return id
+}
+
 export const issuesService = {
   createIssuesService,
   getAllIssuesService,
   getSingleIssueService,
+  updateIssueService,
 };
