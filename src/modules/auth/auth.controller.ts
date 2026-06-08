@@ -4,7 +4,7 @@ import { authService } from "./auth.service";
 
 const signUpUser = async (req: Req, res: Res, next: Next) => {
   try {
-    const result = await authService.createUser(req.body);
+    const result = await authService.createUserService(req.body);
 
     sendResponse(res, 201, "User registered successfully", result);
   } catch (error) {

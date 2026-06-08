@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import envConfig from "../../config";
 
-const createUser = async (payLoad: IRegisterUserPayload) => {
+const createUserService = async (payLoad: IRegisterUserPayload) => {
   const { name, email, password, role } = payLoad;
 
   const allowedRoles = ["maintainer", "contributor"];
@@ -71,6 +71,6 @@ const loginUserService = async (payLoad: IRegisterUserPayload) => {
 };
 
 export const authService = {
-  createUser,
+  createUserService,
   loginUserService,
 };
