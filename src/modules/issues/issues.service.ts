@@ -27,6 +27,11 @@ const createIssuesService = async (
   return result.rows[0];
 };
 
+const getAllIssuesService = async (query: any) => {
+  return query
+}
+
 export const issuesService = {
   createIssuesService,
+  getAllIssuesService,
 };

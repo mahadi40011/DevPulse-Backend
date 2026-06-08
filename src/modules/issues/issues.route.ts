@@ -10,5 +10,6 @@ router.post(
   authMiddleware(UserRoles.maintainer, UserRoles.contributor),
   issuesController.createIssues,
 );
+router.get("", issuesController.getAllIssues);
 
 export const issuesRouter = router;
