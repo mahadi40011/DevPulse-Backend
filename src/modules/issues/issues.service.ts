@@ -162,7 +162,13 @@ const updateIssueService = async (payload: IIssuesPayload, id: string) => {
 };
 
 const deleteIssueService = async (id: string) => {
-  return id;
+  const issueExist = await pool.query(`SELECT * FROM issues WHERE id=$1`, [id]);
+  if (issueExist.rowCount === 0) {
+    throw new AppError("Issue not found", 404);
+  }
+
+  await pool.query(`DELETE FROM issues WHERE id=$1`, [id]);
+  return;
 };
 
 export const issuesService = {
