@@ -1,5 +1,5 @@
 import type { JwtPayload } from "jsonwebtoken";
-import type { IIssuesPayload } from "./issues.interface";
+import type { IIssuesPayload, IQuery } from "./issues.interface";
 import { pool } from "../../db";
 import AppError from "../../utils/appError";
 
@@ -27,9 +27,25 @@ const createIssuesService = async (
   return result.rows[0];
 };
 
-const getAllIssuesService = async (query: any) => {
-  return query
-}
+const getAllIssuesService = async (query: IQuery) => {
+  const { sort = "newest", type, status } = query;
+
+  const allowedSortValue = ["newest", "oldest"];
+  const allowedTypeValue = ["bug", "feature_request"];
+  const allowedStatusValue = ["open", "in_progress", "resolved"];
+
+  if (sort && !allowedSortValue.includes(sort)) {
+    throw new AppError("Invalid sort value", 400);
+  }
+
+  if (type && !allowedTypeValue.includes(type)) {
+    throw new AppError("Invalid type value", 400);
+  }
+
+  if (status && !allowedStatusValue.includes(status)) {
+    throw new AppError("Invalid status value", 400);
+  }
+};
 
 export const issuesService = {
   createIssuesService,

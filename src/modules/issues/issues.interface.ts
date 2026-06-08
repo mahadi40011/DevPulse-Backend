@@ -3,3 +3,9 @@ export interface IIssuesPayload {
   description: string;
   type: "feature_request" | "bug";
 }
+
+export interface IQuery {
+  sort?: string;
+  type?: string;
+  status?: string;
+}
