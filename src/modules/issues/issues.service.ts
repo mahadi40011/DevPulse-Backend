@@ -1,8 +1,9 @@
-import type { IIssuesPayload, JWTPayload } from "./issues.interface";
+import type { JwtPayload } from "jsonwebtoken";
+import type { IIssuesPayload } from "./issues.interface";
 
 const createIssuesService = async (
   payLoad: IIssuesPayload,
-  reporterInfo: JWTPayload,
+  reporterInfo: JwtPayload,
 ) => {
   console.log("from issues service ", payLoad);
   return { payLoad, reporterInfo };
