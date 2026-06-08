@@ -2,6 +2,7 @@ import type { JwtPayload } from "jsonwebtoken";
 import type { IIssuesPayload, IQuery } from "./issues.interface";
 import { pool } from "../../db";
 import AppError from "../../utils/appError";
+import { Result } from "pg";
 
 const createIssuesService = async (
   payload: IIssuesPayload,
@@ -102,14 +103,35 @@ const getAllIssuesService = async (query: IQuery) => {
   });
 
   // Attach reporter to issues
-const data = issues.map(
-  ({ reporter_id, created_at, updated_at, ...issue }) => ({
-    ...issue,
-    reporter: userMap.get(reporter_id) || null,
+  const data = issues.map(
+    ({ reporter_id, created_at, updated_at, ...issue }) => ({
+      ...issue,
+      reporter: userMap.get(reporter_id) || null,
+      created_at,
+      updated_at,
+    }),
+  );
+
+  return data;
+};
+
+const getSingleIssueService = async (id: string) => {
+  const issueData = await pool.query(`SELECT * FROM issues WHERE id=$1`, [id]);
+  const issue = issueData.rows[0];
+
+  const reporterInfo = await pool.query(
+    `SELECT id, name, role FROM users WHERE id=$1`,
+    [issue.reporter_id],
+  );
+  const reporter = reporterInfo.rows[0];
+
+  const { reporter_id, created_at, updated_at, ...rest } = issue;
+  const data = {
+    ...rest,
+    reporter,
     created_at,
     updated_at,
-  }),
-);
+  };
 
   return data;
 };
@@ -117,4 +139,5 @@ const data = issues.map(
 export const issuesService = {
   createIssuesService,
   getAllIssuesService,
+  getSingleIssueService,
 };
