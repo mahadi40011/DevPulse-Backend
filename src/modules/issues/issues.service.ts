@@ -62,6 +62,22 @@ const getAllIssuesService = async (query: IQuery) => {
 
   const whereClause =
     conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+  // Get all issues from database
+  const issuesResult = await pool.query(
+    `
+    SELECT * FROM issues
+    ${whereClause}
+    ORDER BY created_at ${sort === "oldest" ? "ASC" : "DESC"}
+    `,
+    values,
+  );
+
+  const issues = issuesResult.rows;
+
+  if (issues.length === 0) {
+    throw new AppError("No issues found matching your filters", 404);
+  }
 };
 
 export const issuesService = {
