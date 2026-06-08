@@ -4,7 +4,7 @@ import { issuesService } from "./issues.service";
 
 const createIssues = async (req: Req, res: Res, next: Next) => {
   try {
-    const result = await issuesService.createIssuesService(req.body);
+    const result = await issuesService.createIssuesService(req.body, req.user);
 
     sendResponse(res, 201, "Issue created successfully", result);
   } catch (error) {
