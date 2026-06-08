@@ -3,6 +3,7 @@ import type { Req, Res } from "./types";
 import loggerMiddleware from "./middleware/logger.middleware";
 import { authRouter } from "./modules/auth/auth.route";
 import globalErrorHandler from "./middleware/globalErrorHandler";
+import { issuesRouter } from "./modules/issues/issues.route";
 
 const app: Application = express();
 
@@ -18,6 +19,7 @@ app.get("/", (req: Req, res: Res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/issues", issuesRouter);
 
 app.use(globalErrorHandler);
 
