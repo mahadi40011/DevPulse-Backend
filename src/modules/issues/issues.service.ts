@@ -93,6 +93,21 @@ const getAllIssuesService = async (query: IQuery) => {
   );
 
   const users = userResult.rows;
+
+  // Create map
+  const userMap = new Map();
+
+  users.forEach((user) => {
+    userMap.set(user.id, user);
+  });
+
+  // Attach reporter to issues
+  const data = issues.map((issue) => ({
+    ...issue,
+    reporter: userMap.get(issue.reporter_id) || null,
+  }));
+
+  return data;
 };
 
 export const issuesService = {
