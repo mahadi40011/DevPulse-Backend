@@ -102,10 +102,14 @@ const getAllIssuesService = async (query: IQuery) => {
   });
 
   // Attach reporter to issues
-  const data = issues.map((issue) => ({
+const data = issues.map(
+  ({ reporter_id, created_at, updated_at, ...issue }) => ({
     ...issue,
-    reporter: userMap.get(issue.reporter_id) || null,
-  }));
+    reporter: userMap.get(reporter_id) || null,
+    created_at,
+    updated_at,
+  }),
+);
 
   return data;
 };
