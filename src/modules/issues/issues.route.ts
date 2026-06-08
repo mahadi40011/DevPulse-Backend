@@ -1,8 +1,14 @@
 import { Router } from "express";
 import { issuesController } from "./issues.controller";
+import authMiddleware from "../../middleware/auth.middleware";
+import { UserRoles } from "../../types";
 
 const router = Router();
 
-router.post("/", issuesController.createIssues);
+router.post(
+  "/",
+  authMiddleware(UserRoles.maintainer, UserRoles.contributor),
+  issuesController.createIssues,
+);
 
 export const issuesRouter = router;
