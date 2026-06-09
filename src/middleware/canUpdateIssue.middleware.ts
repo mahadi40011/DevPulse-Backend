@@ -15,7 +15,9 @@ const canUpdateIssue = async (req: Req, res: Res, next: Next) => {
     const issue = result.rows[0];
 
     if (!issue) {
-      return res.status(404).json({ message: "Issue not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Issue not found" });
     }
 
     // user role check with database
