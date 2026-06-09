@@ -131,6 +131,11 @@ const getAllIssuesService = async (query: IQuery) => {
 };
 
 const getSingleIssueService = async (id: string) => {
+  const issueExist = await pool.query(`SELECT * FROM issues WHERE id=$1`, [id]);
+  if (issueExist.rowCount === 0) {
+    throw new AppError("Issue not found", 404);
+  }
+  
   const issueData = await pool.query(`SELECT * FROM issues WHERE id=$1`, [id]);
   const issue = issueData.rows[0];
 
