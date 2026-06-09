@@ -4,9 +4,19 @@ import loggerMiddleware from "./middleware/logger.middleware";
 import { authRouter } from "./modules/auth/auth.route";
 import globalErrorHandler from "./middleware/globalErrorHandler";
 import { issuesRouter } from "./modules/issues/issues.route";
+import cors from "cors";
+import envConfig from "./config";
 
 const app: Application = express();
 
+app.use(
+  cors({
+    origin: [
+      envConfig.client_url as string,
+      envConfig.development_url as string,
+    ],
+  }),
+);
 app.use(express.json());
 app.use(loggerMiddleware);
 
