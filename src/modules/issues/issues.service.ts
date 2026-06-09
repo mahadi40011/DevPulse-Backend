@@ -9,6 +9,22 @@ const createIssuesService = async (
 ) => {
   const { title, description, type } = payload;
 
+  if (!title || !description || !type) {
+    throw new AppError("Missing required fields", 400, {
+      title: !title ? "title is required" : title,
+      description: !description ? "description is required" : description,
+      type: !type ? "type is required" : type,
+    });
+  }
+
+  if (title.length > 150) {
+    throw new AppError("Title must be maximum 150 characters", 400);
+  }
+
+  if (description.length < 20) {
+    throw new AppError("Description must be at least 20 characters", 400);
+  }
+
   const allowedTypes = ["feature_request", "bug"];
 
   if (!allowedTypes.includes(type as string)) {
